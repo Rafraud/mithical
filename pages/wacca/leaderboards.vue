@@ -121,7 +121,7 @@ function getRankDescription(username) {
   }
 
   const scoreCount =
-    leaderboardData.value.length === 100 ? "100" : leaderboardData.value.length;
+    leaderboardData.value.length === 100 ? "100+" : leaderboardData.value.length;
 
   return !playerRank ? "Unranked" : `${playerRank} / ${scoreCount}`;
 }
