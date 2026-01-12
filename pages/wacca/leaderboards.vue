@@ -12,9 +12,6 @@
       </div>
 
       <div v-else>
-          <h3 class="your-rank">
-            Your Rank: {{ getRankDescription(profile.user_name) }}
-          </h3>
         <v-alert v-if="leaderboardsLoadingError" type="error" class="mt-4">{{
           leaderboardsLoadingError
         }}</v-alert>
@@ -29,15 +26,11 @@
           </thead>
 
           <tbody>
-            <tr 
-              v-for="(player, i) in leaderboardData" 
-              :key="i"
-              :class="{ highlight: player.user_name == profile.user_name }"
-              >
+            <tr v-for="(profile, i) in leaderboardData" :key="i">
               <td class="text-right">
                 <span
                   v-if="
-                    i == 0 || leaderboardData[i - 1].rating != player.rating
+                    i == 0 || leaderboardData[i - 1].rating != profile.rating
                   "
                 >
                   {{ i + 1 }}
@@ -47,14 +40,14 @@
               <td>
                 <WaccaIcon
                   class="leaderboard-icon"
-                  :icon="player.user_icon_id"
+                  :icon="profile.user_icon_id"
                 />
-                {{ player.user_name }}
+                {{ profile.user_name }}
               </td>
               <td>
                 <WaccaRating
                   class="rating"
-                  :rating="player.rating"
+                  :rating="profile.rating"
                   :simple="i >= 10"
                 />
               </td>
@@ -77,10 +70,6 @@
   font-size: 2.5em;
 }
 
-tr.highlight {
-  background-color: rgba(var(--v-theme-primary), 0.1);
-}
-
 :deep(.rating-white) {
   color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
 }
@@ -93,38 +82,9 @@ definePageMeta({
 
 const leaderboardsLoading = ref(false);
 const leaderboardsLoadingError = ref();
-const highscores = ref([]);
 const runtimeConfig = useRuntimeConfig();
 const leaderboardData = ref([]);
 const version = useState("version");
-const profile = useState("profile");
-
-
-function getRankDescription(username) {
-  if (!highscores.value) {
-    return "Unknown";
-  }
-
-  // If there is more than one user with the same score, the displayed rank is equal to the first listed player with that score
-  let playerRank;
-  let currentRanking;
-  let currentScore;
-  for (let i = 0; i < leaderboardData.value.length; i++) {
-    if (!currentScore || leaderboardData.value[i].score < currentScore) {
-      currentScore = leaderboardData.value[i].score;
-      currentRanking = i + 1;
-    }
-    if (leaderboardData.value[i].user_name === username) {
-      playerRank = currentRanking;
-      break;
-    }
-  }
-
-  const scoreCount =
-    leaderboardData.value.length === 100 ? "100" : leaderboardData.value.length;
-
-  return !playerRank ? "Unranked" : `${playerRank} / ${scoreCount}`;
-}
 
 function loadData() {
   leaderboardsLoading.value = ref(true);
