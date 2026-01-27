@@ -820,7 +820,7 @@ const waccaSongs = [
       },
       {
         difficulty: 12.9,
-        gameVersion: 100,
+        gameVersion: 400,
         charter: "Leitmotif, Watching the Sea Lilies",
       },
     ],
@@ -1678,7 +1678,7 @@ const waccaSongs = [
       },
       {
         difficulty: 13.3,
-        gameVersion: 100,
+        gameVersion: 400,
         charter: "さけ",
       },
     ],
