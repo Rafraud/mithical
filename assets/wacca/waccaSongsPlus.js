@@ -15093,7 +15093,7 @@ const waccaSongs = [
     dateRemoved: 0,
     gameVersion: 400,
     bpm: 200,
-    imageName: "S04/uT_J_S04_149.png",
+    imageName: "S04/uT_J_S04_149.webp",
     category: "東方アレンジ",
     releaseDate: "2026-07-31",
     sheets: [
@@ -15254,7 +15254,7 @@ const waccaSongs = [
     dateRemoved: 0,
     gameVersion: 400,
     bpm: 160,
-    imageName: "S04/uT_J_S04_033.png",
+    imageName: "S04/uT_J_S04_033.webp",
     category: "バラエティ",
     releaseDate: "2026-08-31",
     sheets: [
@@ -15284,7 +15284,7 @@ const waccaSongs = [
     dateRemoved: 0,
     gameVersion: 400,
     bpm: 140,
-    imageName: "S04/uT_J_S04_134.png",
+    imageName: "S04/uT_J_S04_134.webp",
     category: "東方アレンジ",
     releaseDate: "2026-08-31",
     sheets: [
@@ -15314,7 +15314,7 @@ const waccaSongs = [
     dateRemoved: 0,
     gameVersion: 400,
     bpm: 161,
-    imageName: "S04/uT_J_S04_140.png",
+    imageName: "S04/uT_J_S04_140.webp",
     category: "東方アレンジ",
     releaseDate: "2026-08-31",
     sheets: [
@@ -15344,7 +15344,7 @@ const waccaSongs = [
     dateRemoved: 0,
     gameVersion: 400,
     bpm: 200,
-    imageName: "S04/uT_J_S04_146.png",
+    imageName: "S04/uT_J_S04_146.webp",
     category: "東方アレンジ",
     releaseDate: "2026-08-31",
     sheets: [
@@ -15374,7 +15374,7 @@ const waccaSongs = [
     dateRemoved: 0,
     gameVersion: 400,
     bpm: 180,
-    imageName: "S04/uT_J_S04_148.png",
+    imageName: "S04/uT_J_S04_148.webp",
     category: "東方アレンジ",
     releaseDate: "2026-08-31",
     sheets: [
