@@ -10,7 +10,7 @@
           class="single-song-details"
           :style="{
             'background-image':
-              'url(/wacca/img/games/' + song.gameVersion + '.png)',
+              'url(/wacca/img/games/' + song.gameVersion + '.webp)',
           }"
         >
           <div class="single-song-header">
@@ -244,6 +244,7 @@
 
 .single-song-cover {
   width: 320px;
+  flex-shrink: 0;
 }
 
 .single-song-details {
@@ -329,6 +330,7 @@ import getSongs from "~/assets/wacca/getSongs.js";
 import waccaDifficulties from "~/assets/wacca/waccaDifficulties";
 import waccaGradeBorders from "~/assets/wacca/waccaGradeBorders";
 import waccaCategories from "~/assets/wacca/waccaCategories";
+import { getSongSlug, findSongBySlug } from "~/assets/wacca/songSlug.js";
 
 const profile = useState("profile");
 
@@ -342,9 +344,30 @@ const activeCard = useState("activeCard");
 const version = useState("version");
 
 const song = computed(() => {
-  return getSongs(version.value).find(
-    (song) => song.id === parseInt(route.params.id)
-  );
+  const songs = getSongs(version.value);
+  const param = route.params.slug;
+
+  if (/^\d+$/.test(param)) {
+    const byId = songs.find((song) => song.id === parseInt(param));
+    if (byId) {
+      return byId;
+    }
+  }
+
+  return findSongBySlug(param, songs);
+});
+
+// Legacy id links (and any slug that's gone stale) get normalized to the
+// canonical slug URL so slugs are always what ends up in the address bar.
+watchEffect(() => {
+  if (!song.value) {
+    return;
+  }
+
+  const canonicalSlug = getSongSlug(song.value, getSongs(version.value));
+  if (route.params.slug !== canonicalSlug) {
+    navigateTo(`/wacca/songs/${canonicalSlug}`, { replace: true });
+  }
 });
 
 const fullUrl = computed(() => {
@@ -577,12 +600,24 @@ const categoryName = computed(() => {
   return category.value.en;
 });
 
+const ogDescription = computed(() => {
+  return [
+    `by ${song.value.artist}`,
+    categoryName.value,
+    `Charted by ${chartedBy.value}`,
+  ]
+    .filter(Boolean)
+    .join(" · ");
+});
+
 useSeoMeta({
   title: `Mithical | ${getTitle.value}`,
   ogTitle: `Mithical | ${getTitle.value}`,
-  description: "View your scores and the leaderboards for this song!",
-  ogDescription: "View your scores and the leaderboards for this song!",
-  ogImage: fullUrl.value,
-  twitterCard: "summary",
+  ogSiteName: "Mithical",
+  description: ogDescription,
+  ogDescription,
+  ogImage: () => `${useRequestURL().origin}${fullUrl.value}`,
+  ogUrl: () => useRequestURL().href,
+  twitterCard: "summary_large_image",
 });
 </script>

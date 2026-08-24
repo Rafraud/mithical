@@ -1,4 +1,5 @@
 // https://v3.nuxtjs.org/api/configuration/nuxt.config
+import vuetify, { transformAssetUrls } from "vite-plugin-vuetify";
 
 export default defineNuxtConfig({
   css: [
@@ -18,6 +19,14 @@ export default defineNuxtConfig({
     transpile: ["vuetify"],
   },
 
+  modules: [
+    (_options, nuxt) => {
+      nuxt.hooks.hook("vite:extendConfig", (config) => {
+        config.plugins!.push(vuetify({ autoImport: true }));
+      });
+    },
+  ],
+
   runtimeConfig: {
     public: {
       apiUrl: process.env.MITHICAL_BACKEND_URL || "http://localhost:3001",
@@ -33,8 +42,12 @@ export default defineNuxtConfig({
       preprocessorOptions: {
         scss: {
           api: "modern-compiler", // or "modern"
+          silenceDeprecations: ["import", "global-builtin"],
         },
       },
+    },
+    vue: {
+      template: { transformAssetUrls },
     },
   },
 });
