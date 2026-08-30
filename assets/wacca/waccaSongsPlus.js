@@ -11902,7 +11902,7 @@ const waccaSongs = [
         charter: "Marvelous",
       },
       {
-        difficulty: 12.6,
+        difficulty: 13.6,
         gameVersion: 400,
         charter: "狐憑き",
       },
