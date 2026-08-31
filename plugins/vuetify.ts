@@ -28,7 +28,7 @@ const waccaOledTheme: ThemeDefinition = {
     navbar: "#000",
     surface: "#000",
     boxcolor: "#000",
-    "surface-variant": "#000",
+    "surface-variant": "#777777",
   },
 };
 const waccaLightPlusTheme: ThemeDefinition = {
@@ -57,7 +57,7 @@ const waccaOledPlusTheme: ThemeDefinition = {
     navbar: "#000",
     surface: "#000",
     boxcolor: "#000",
-    "surface-variant": "#000",
+    "surface-variant": "#777777",
   },
 };
 
