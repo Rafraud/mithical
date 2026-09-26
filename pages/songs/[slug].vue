@@ -147,6 +147,49 @@
       </div>
     </v-container>
 
+        <v-container class="elevation-1 mt-4">
+      <h2 class="container-heading chartview-heading">
+        Chart View
+
+
+        <v-btn-toggle
+          v-model="chartView"
+          mandatory
+          density="compact"
+          variant="outlined"
+          divided
+          class="chartview-toggle"
+        >
+          <v-btn value="normal" size="small">Normal</v-btn>
+          <v-btn value="hard" size="small">Hard</v-btn>
+          <v-btn value="expert" size="small">Expert</v-btn>
+          <v-btn v-if="song.sheets.length > 3" value="inferno" size="small">Inferno</v-btn>
+        </v-btn-toggle>
+      </h2>
+      <div v-if="histogramsLoading" class="d-flex justify-center">
+        <v-progress-circular
+          indeterminate
+          color="primary"
+          :size="80"
+          :width="10"
+          class="mt-4"
+        ></v-progress-circular>
+      </div>
+
+      <div v-else>
+        <v-alert v-if="histogramsLoadingError" type="error" class="mt-4">{{
+          histogramsLoadingError
+        }}</v-alert>
+
+        <div v-else class="playfield-preview">
+        <div ref="previewColumn" class="settings-preview">
+          <WaccaPlayfieldPreview :options="profile.options" :chartId="demo" :diff="demo" />
+        </div>
+
+        </div>
+      </div>
+    </v-container>
+    
     <v-container class="elevation-1 mt-4">
       <h2 class="container-heading">Leaderboards</h2>
       <WaccaLeaderboard
@@ -257,6 +300,13 @@
   gap: 6px;
 }
 
+.chartview-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
 .histogram-toggle {
   height: 30px !important;
   margin-left: auto;
@@ -265,6 +315,21 @@
     text-transform: none;
     letter-spacing: normal;
   }
+}
+
+.chartview-toggle {
+  height: 30px !important;
+  margin-left: auto;
+
+  .v-btn {
+    text-transform: none;
+    letter-spacing: normal;
+  }
+}
+
+.playfield-preview {
+  width: min(100%, 560px);
+  margin: 0 auto 32px;
 }
 
 </style>
@@ -335,6 +400,7 @@ const histograms = shallowRef([]);
 const histogramsLoading = ref(false);
 const histogramsLoadingError = ref();
 const histogramView = ref("distribution");
+const chartView = ref("chartView");
 
 const playerHistory = shallowRef([]);
 

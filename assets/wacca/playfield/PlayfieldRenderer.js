@@ -20,7 +20,7 @@ import {
 } from "./noteColors.js";
 import { parseMer, buildChart } from "./merChart.js";
 // Bundled at build time, loaded like any other chart
-import demoMer from "./demo.mer?raw";
+import demoMer from "./charts/3/expert.mer?raw";
 import waccaSymbolColors from "../waccaSymbolColors.js";
 
 const DEG = Math.PI / 180;
