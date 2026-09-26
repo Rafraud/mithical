@@ -147,6 +147,39 @@
       </div>
     </v-container>
 
+        <v-container class="elevation-1 mt-4">
+      <h2 class="container-heading chartview-heading">
+        Chart View
+
+        <v-btn-toggle
+          v-model="chartView"
+          mandatory
+          density="compact"
+          variant="outlined"
+          divided
+          class="chartview-toggle"
+        >
+          <v-btn value="0" size="small">Normal</v-btn>
+          <v-btn value="1" size="small">Hard</v-btn>
+          <v-btn value="2" size="small">Expert</v-btn>
+          <v-btn v-if="song.sheets.length > 3" value="3" size="small">Inferno</v-btn>
+        </v-btn-toggle>
+      </h2>
+      <div ref="previewColumn" class="settings-preview">
+        <WaccaPlayfieldPreview :options="profile.options" :chart-url="previewChart" :diff="chartView" />
+      </div>
+    </v-container>
+    
+    <v-container class="elevation-1 mt-4">
+      <h2 class="container-heading">Leaderboards</h2>
+      <WaccaLeaderboard
+        :song="song"
+        :sheets="filteredSheets"
+        :histograms="histograms"
+        :player-history="playerHistory"
+      />
+    </v-container>
+
     <v-container class="elevation-1 mt-4">
       <h2 class="container-heading">Leaderboards</h2>
       <WaccaLeaderboard
@@ -267,6 +300,26 @@
   }
 }
 
+.chartview-toggle {
+  height: 30px !important;
+  margin-left: auto;
+  .v-btn {
+    text-transform: none;
+    letter-spacing: normal;
+  }
+}
+.playfield-preview {
+  width: min(100%, 560px);
+  margin: 0 auto 32px;
+}
+
+.chartview-heading {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
 </style>
 
 <script setup>
@@ -283,7 +336,6 @@ import waccaCategories from "~/assets/wacca/waccaCategories";
 import { getSongSlug, findSongBySlug } from "~/assets/wacca/songSlug.js";
 
 const profile = useState("profile");
-
 definePageMeta({
   middleware: ["auth"],
 });
@@ -335,9 +387,15 @@ const histograms = shallowRef([]);
 const histogramsLoading = ref(false);
 const histogramsLoadingError = ref();
 const histogramView = ref("distribution");
+const chartView = ref("0");
+
 
 const playerHistory = shallowRef([]);
 
+const previewChart = computed(() => {
+  const chart = `/wacca/MusicData/${song.value.id}/${song.value.id}_0`;
+  return chart;
+});
 function loadHistograms() {
   histogramsLoading.value = true;
   $fetch(

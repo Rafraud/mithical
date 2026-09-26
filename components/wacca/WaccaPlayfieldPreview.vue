@@ -179,8 +179,12 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  // Diff of the chart
+  diff: {
+    type: String,
+    default: 0, 
+  }
 });
-
 const container = ref(null);
 const canvas = ref(null);
 const expanded = ref(false);
@@ -398,7 +402,7 @@ async function loadChart(url) {
   }
 }
 
-watch(() => props.chartUrl, loadChart);
+watch(() => props.chartUrl.includes("demo") ? props.chartUrl : props.chartUrl + props.diff + ".mer", loadChart);
 
 function formatTime(ms) {
   const seconds = Math.floor(ms / 1000);
@@ -466,7 +470,14 @@ onMounted(() => {
   renderer = new PlayfieldRenderer(canvas.value);
   renderer.setOptions(props.options);
   songLength.value = renderer.songLength;
-  loadChart(props.chartUrl);
+  if(props.chartUrl.includes("demo"))
+  {
+    loadChart(props.chartUrl);
+  }
+  else
+  {
+    loadChart(props.chartUrl + props.diff + ".mer");
+  }
 
   resizeObserver = new ResizeObserver(([entry]) => {
     cssSize = entry.contentRect.width;
