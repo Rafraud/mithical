@@ -183,7 +183,7 @@
 
         <div v-else class="playfield-preview">
         <div ref="previewColumn" class="settings-preview">
-          <WaccaPlayfieldPreview :options="profile.options" :chartId="demo" :diff="demo" />
+          <WaccaPlayfieldPreview :options="profile.options" />
         </div>
 
         </div>
@@ -400,7 +400,7 @@ const histograms = shallowRef([]);
 const histogramsLoading = ref(false);
 const histogramsLoadingError = ref();
 const histogramView = ref("distribution");
-const chartView = ref("chartView");
+const chartView = ref("normal");
 
 const playerHistory = shallowRef([]);
 

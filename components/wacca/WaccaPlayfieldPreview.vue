@@ -114,16 +114,6 @@ const props = defineProps({
     type: Object,
     default: () => ({}),
   },
-
-  chartId: {
-    type: Number,
-    default: "demo",
-  },
-
-  diff: {
-    type: String,
-    default: "demo",
-  }
 });
 
 const container = ref(null);
@@ -327,7 +317,7 @@ watch(
 );
 
 onMounted(() => {
-  renderer = new PlayfieldRenderer(canvas.value, props.chartId, props.diff);
+  renderer = new PlayfieldRenderer(canvas.value);
   renderer.setOptions(props.options);
 
   resizeObserver = new ResizeObserver(([entry]) => {
