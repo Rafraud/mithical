@@ -2,177 +2,175 @@
   <WaccaProfileRequired>
     <v-container>
       <div class="song-options">
-        <v-btn-group>
-          <v-btn color="primary">
-            {{ activeSort.text == "Default" ? "Sorting" : activeSort.text }}
+        <div class="song-options-row">
+          <div class="song-options-buttons">
+            <v-btn-group>
+              <v-btn color="primary">
+                {{ activeSort.text == "Default" ? "Sorting" : activeSort.text }}
 
-            <v-menu activator="parent">
-              <v-card class="sort-menu">
-                <v-btn
-                  variant="plain"
-                  v-for="sortOption in sortOptions"
-                  :id="sortOption.text"
-                  @click="clickSort(sortOption)"
-                  :color="
-                    activeSort.text.includes(sortOption.text) ? 'primary' : ''
-                  "
-                >
-                  {{ sortOption.text }}
-
-                  <v-icon v-if="sortOption.subItems">mdi-chevron-right</v-icon>
-
-                  <v-menu
-                    v-if="sortOption.subItems"
-                    location="end"
-                    activator="parent"
-                    transition="slide-x-transition"
-                  >
-                    <v-card class="sort-menu">
-                      <v-btn
-                        variant="plain"
-                        v-for="sortOptionSub in sortOption.subItems"
-                        :id="sortOptionSub.text"
-                        @click="clickSort(sortOptionSub)"
-                        :color="
-                          sortOptionSub.text == activeSort.text ? 'primary' : ''
-                        "
-                      >
-                        {{ sortOptionSub.subText }}
-                      </v-btn>
-                    </v-card>
-                  </v-menu>
-                </v-btn>
-              </v-card>
-            </v-menu>
-          </v-btn>
-
-          <v-btn
-            color="primary"
-            @click="toggleSortDirection"
-            class="sort-order-button"
-          >
-            <div v-if="sortOrder == 'asc'">
-              <v-icon>mdi-arrow-expand-up</v-icon>
-            </div>
-            <div v-else>
-              <v-icon>mdi-arrow-expand-down</v-icon>
-            </div>
-          </v-btn>
-        </v-btn-group>
-
-        <v-btn-group>
-          <v-btn color="primary">
-            Filters
-
-            <v-menu activator="parent">
-              <div class="song-filters" @click.stop>
-                <div v-for="filter in filters" class="song-filter-row">
-                  <div class="song-filter-help">
-                    <div
-                      v-if="filter.type == 'help'"
-                      v-for="help in filter.help"
+                <v-menu activator="parent">
+                  <v-card class="sort-menu">
+                    <v-btn
+                      variant="plain"
+                      v-for="sortOption in sortOptions"
+                      :id="sortOption.text"
+                      @click="clickSort(sortOption)"
+                      :color="
+                        activeSort.text.includes(sortOption.text)
+                          ? 'primary'
+                          : ''
+                      "
                     >
-                      {{ help }}
-                    </div>
-                  </div>
+                      {{ sortOption.text }}
 
-                  <div v-if="filter.type == 'heading'">
-                    <div class="song-filter-heading">{{ filter.text }}</div>
-                  </div>
-
-                  <div
-                    class="song-filter-buttons"
-                    v-if="filter.type == 'buttons'"
-                  >
-                    <div class="song-filter-label" v-if="filter.text">
-                      {{ filter.text }}
-                    </div>
-
-                    <v-btn-group rounded="0" v-if="filter.subItems">
-                      <v-btn
-                        variant="text"
-                        v-for="filterSub in filter.subItems"
-                        @click="clickFilter(filter, filterSub)"
-                        :color="filterSub.active ? 'primary' : ''"
+                      <v-icon v-if="sortOption.subItems"
+                        >mdi-chevron-right</v-icon
                       >
-                        <v-icon>{{
-                          filterSub.active
-                            ? filterSub.iconActive
-                            : filterSub.icon
-                        }}</v-icon>
-                      </v-btn>
-                    </v-btn-group>
-                  </div>
 
-                  <div
-                    v-if="filter.type == 'range-slider'"
-                    class="song-filter-range-slider"
-                  >
-                    <div>
-                      {{ filter.text }}
-                    </div>
-                    <v-range-slider
-                      v-model="filter.model"
-                      :min="filter.min"
-                      :max="filter.max"
-                      :step="filter.step"
-                      thumb-label
-                      color="primary"
-                      hide-details
-                    />
-                  </div>
+                      <v-menu
+                        v-if="sortOption.subItems"
+                        location="end"
+                        activator="parent"
+                        transition="slide-x-transition"
+                      >
+                        <v-card class="sort-menu">
+                          <v-btn
+                            variant="plain"
+                            v-for="sortOptionSub in sortOption.subItems"
+                            :id="sortOptionSub.text"
+                            @click="clickSort(sortOptionSub)"
+                            :color="
+                              sortOptionSub.text == activeSort.text
+                                ? 'primary'
+                                : ''
+                            "
+                          >
+                            {{ sortOptionSub.subText }}
+                          </v-btn>
+                        </v-card>
+                      </v-menu>
+                    </v-btn>
+                  </v-card>
+                </v-menu>
+              </v-btn>
+
+              <v-btn
+                color="primary"
+                @click="toggleSortDirection"
+                class="sort-order-button"
+              >
+                <div v-if="sortOrder == 'asc'">
+                  <v-icon>mdi-arrow-expand-up</v-icon>
+                </div>
+                <div v-else>
+                  <v-icon>mdi-arrow-expand-down</v-icon>
+                </div>
+              </v-btn>
+            </v-btn-group>
+
+            <v-btn-group>
+              <v-btn color="primary" @click="filtersOpen = !filtersOpen">
+                Filters
+                <v-icon end>{{
+                  filtersOpen ? "mdi-chevron-up" : "mdi-chevron-down"
+                }}</v-icon>
+              </v-btn>
+            </v-btn-group>
+          </div>
+
+          <v-text-field
+            class="song-search"
+            v-model="search"
+            label="Find a Song"
+            prepend-inner-icon="mdi-magnify"
+            variant="solo"
+            rounded="pill"
+            single-line
+            hide-details
+            clearable
+            height="40"
+          ></v-text-field>
+        </div>
+      </div>
+
+      <Collapse :when="filtersOpen">
+        <div class="song-filter-panel">
+          <div class="song-filters">
+            <div v-for="filter in filters" class="song-filter-row">
+              <div class="song-filter-help">
+                <div v-if="filter.type == 'help'" v-for="help in filter.help">
+                  {{ help }}
                 </div>
               </div>
-            </v-menu>
-          </v-btn>
-        </v-btn-group>
 
-        <v-btn-group>
-          <v-btn color="primary"> Categories </v-btn>
+              <div v-if="filter.type == 'heading'">
+                <div class="song-filter-heading">{{ filter.text }}</div>
+              </div>
 
-          <v-menu activator="parent">
-            <div class="song-categories" @click.stop>
-              <WaccaCategoryToggle
-                v-for="category in waccaCategoriesFiltered"
-                :key="category.ja"
-                :category="category"
-                :active-categories="activeCategories"
-                @click="toggleCategory(category)"
-                :language="language"
-              />
+              <div class="song-filter-buttons" v-if="filter.type == 'buttons'">
+                <div class="song-filter-label" v-if="filter.text">
+                  {{ filter.text }}
+                </div>
+
+                <v-btn-group rounded="0" v-if="filter.subItems">
+                  <v-btn
+                    variant="text"
+                    v-for="filterSub in filter.subItems"
+                    @click="clickFilter(filter, filterSub)"
+                    :color="filterSub.active ? 'primary' : ''"
+                  >
+                    <v-icon>{{
+                      filterSub.active ? filterSub.iconActive : filterSub.icon
+                    }}</v-icon>
+                  </v-btn>
+                </v-btn-group>
+              </div>
+
+              <div
+                v-if="filter.type == 'range-slider'"
+                class="song-filter-range-slider"
+              >
+                <div>
+                  {{ filter.text }}
+                </div>
+                <v-range-slider
+                  v-model="filter.model"
+                  :min="filter.min"
+                  :max="filter.max"
+                  :step="filter.step"
+                  thumb-label
+                  color="primary"
+                  hide-details
+                />
+              </div>
             </div>
-          </v-menu>
-        </v-btn-group>
+          </div>
 
-        <v-btn-group>
-          <v-btn color="primary"> Versions </v-btn>
+          <div class="song-filter-heading">Categories</div>
+          <div class="song-categories">
+            <WaccaCategoryToggle
+              v-for="category in waccaCategoriesFiltered"
+              :key="category.ja"
+              :category="category"
+              :active-categories="activeCategories"
+              @click="toggleCategory(category)"
+              :language="language"
+            />
+          </div>
 
-          <v-menu activator="parent">
-            <div class="song-categories" @click.stop>
-              <WaccaCategoryToggle
-                v-for="category in waccaVersionsFiltered"
-                :key="category.ja"
-                :category="category"
-                :active-categories="activeCategories"
-                @click="toggleCategory(category)"
-                :language="language"
-              />
-            </div>
-          </v-menu>
-        </v-btn-group>
-
-        <v-text-field
-          class="song-search"
-          v-model="search"
-          label="Find a Song"
-          prepend-inner-icon="mdi-magnify"
-          variant="solo"
-          single-line
-          hide-details
-          clearable
-          height="40"
-        ></v-text-field>
-      </div>
+          <div class="song-filter-heading">Versions</div>
+          <div class="song-categories">
+            <WaccaCategoryToggle
+              v-for="category in waccaVersionsFiltered"
+              :key="category.ja"
+              :category="category"
+              :active-categories="activeCategories"
+              @click="toggleCategory(category)"
+              :language="language"
+            />
+          </div>
+        </div>
+      </Collapse>
 
       <div class="songs-result-count">
         Showing {{ songsFiltered.length }} of {{ totalSongs }} songs
@@ -210,17 +208,49 @@
 
 <style scoped lang="scss">
 .song-options {
-  display: flex;
-  flex-direction: row;
-  gap: 10px;
-  flex-wrap: wrap;
+  container-type: inline-size;
   margin: 1em 0;
+}
+
+.song-options-row {
+  display: flex;
+  gap: 10px;
   align-items: stretch;
+}
+
+.song-options-buttons {
+  display: flex;
+  gap: 10px;
 
   > .v-btn-group {
     display: flex;
     height: auto;
     min-height: 56px;
+  }
+}
+
+.song-search {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+// once the search box no longer fits beside the buttons, it moves above
+// them and sorting and filters share the row below
+@container (max-width: 500px) {
+  .song-options-row {
+    flex-direction: column-reverse;
+  }
+
+  .song-options-buttons > .v-btn-group {
+    flex: 1 1 auto;
+
+    > .v-btn:not(.sort-order-button) {
+      flex-grow: 1;
+    }
+  }
+
+  .song-search {
+    flex: none;
   }
 }
 
@@ -233,58 +263,66 @@
   }
 }
 
+// a faint divider, so it reads as part of the sorting button rather than a
+// separate one
 .sort-order-button {
-  border-left: 2px solid rgba(var(--v-theme-background), 0.7) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.35) !important;
 }
 
-.song-filters {
-  padding: 0.5em;
+.song-filter-panel {
+  padding: 0.5em 1em 1em;
+  margin-bottom: 1em;
   background: rgb(var(--v-theme-surface));
-  overflow: auto;
-  border-radius: inherit;
+  border-radius: 4px;
+}
 
-  box-shadow:
-    0px 5px 5px -3px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2)),
-    0px 8px 10px 1px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.14)),
-    0px 3px 14px 2px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.12));
+// keep the filter rows as compact as they were in the old pop-up menu
+.song-filters {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.song-filter-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  max-width: 1000px;
+  font-weight: 700;
+  text-transform: uppercase;
+
+  &:not(:first-child) {
+    margin-top: 1em;
+  }
+  color: rgb(var(--v-theme-primary));
+
+  &:before,
+  &:after {
+    content: "";
+    flex-grow: 1;
+    background: rgb(var(--v-theme-primary));
+    height: 1px;
+    font-size: 0px;
+    line-height: 0px;
+  }
 }
 
 .song-filter-row {
   .song-filter-buttons {
+    max-width: 480px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
     width: 100%;
-  }
-
-  .song-filter-heading {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    width: 100%;
-    font-weight: 700;
-    text-transform: uppercase;
-
-    &:not(:first-child) {
-      margin-top: 1em;
-    }
-    color: rgb(var(--v-theme-primary));
-
-    &:before,
-    &:after {
-      content: "";
-      flex-grow: 1;
-      background: rgb(var(--v-theme-primary));
-      height: 1px;
-      font-size: 0px;
-      line-height: 0px;
-    }
   }
 
   .song-filter-help {
     width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -301,11 +339,12 @@
   }
 
   .song-filter-range-slider {
+    max-width: 480px;
+    margin: 0 auto;
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 7px 0;
 
     .v-slider {
       width: 100%;
@@ -316,14 +355,12 @@
 }
 
 .song-categories {
-  background: rgb(var(--v-theme-surface));
-  padding: 0.5em;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 10px;
-  border-radius: inherit;
+  margin-top: 0.5em;
   user-select: none;
-  overflow: auto;
 }
 
 .songs-result-count {
@@ -349,7 +386,9 @@
   }
 }
 
-@media (max-width: 500px) {
+// narrow filter buttons: the six clear status buttons plus their label need
+// about 450px, so switch well before the panel gets that tight
+@media (max-width: 560px) {
   .song-filter-buttons {
     gap: 2px !important;
   }
@@ -363,11 +402,19 @@
     width: 42px !important;
     font-size: 0.8em;
   }
+
+  // two categories per row instead of one
+  .song-categories :deep(.song-category) {
+    width: calc(50% - 5px);
+    height: 60px;
+    font-size: 1.3em;
+  }
 }
 </style>
 
 <script setup>
 import fuzzysort from "fuzzysort";
+import { Collapse } from "vue-collapsed";
 import getSongs from "~/assets/wacca/getSongs.js";
 import waccaDifficulties from "~/assets/wacca/waccaDifficulties";
 import waccaCategories from "~/assets/wacca/waccaCategories";
@@ -381,20 +428,21 @@ const songsForVersion = computed(() => getSongs(version.value));
 const totalSongs = computed(
   () =>
     songsForVersion.value.filter((song) => song.gameVersion <= version.value)
-      .length,
+      .length
 );
 
 definePageMeta({
-  middleware: ["auth"],
-  keepalive: true,
+  middleware: ["auth"]
 });
+// app.vue keeps this page alive by name
+defineOptions({ name: "SongsPage" });
 
 const sortOptions = [
   {
     text: "Default",
     sortFunction: () => {
       return sortOrder.value == "asc" ? 1 : -1;
-    },
+    }
   },
   {
     text: "Title",
@@ -412,7 +460,7 @@ const sortOptions = [
       } else {
         return bTitle.localeCompare(aTitle);
       }
-    },
+    }
   },
   {
     text: "Artist",
@@ -422,7 +470,7 @@ const sortOptions = [
       } else {
         return b.artist.localeCompare(a.artist);
       }
-    },
+    }
   },
   {
     text: "Play Count",
@@ -439,7 +487,7 @@ const sortOptions = [
           (profile.value.songs[a.id]?.playCount ?? 0)
         );
       }
-    },
+    }
   },
   {
     text: "Rating",
@@ -456,7 +504,7 @@ const sortOptions = [
           (profile.value.songs[a.id]?.rating ?? 0)
         );
       }
-    },
+    }
   },
   {
     text: "Difficulty",
@@ -470,7 +518,7 @@ const sortOptions = [
           } else {
             return b.sheets[0].difficulty - a.sheets[0].difficulty;
           }
-        },
+        }
       },
       {
         text: "Hard Difficulty",
@@ -481,7 +529,7 @@ const sortOptions = [
           } else {
             return b.sheets[1].difficulty - a.sheets[1].difficulty;
           }
-        },
+        }
       },
       {
         text: "Expert Difficulty",
@@ -492,31 +540,36 @@ const sortOptions = [
           } else {
             return b.sheets[2].difficulty - a.sheets[2].difficulty;
           }
-        },
+        }
       },
       {
         text: "Inferno Difficulty",
         subText: "Inferno",
         sortFunction(a, b) {
-          let aDiff = 16;
-          let bDiff = 16;
+          const aInf = a.sheets[3] && a.sheets[3].gameVersion <= version.value;
+          const bInf = b.sheets[3] && b.sheets[3].gameVersion <= version.value;
 
-          if (a.sheets[3] && a.sheets[3].gameVersion <= version.value) {
-            aDiff = a.sheets[3].difficulty;
+          if (!aInf && !bInf) {
+            return 0;
+          }
+          if (!aInf) {
+            return 1;
+          }
+          if (!bInf) {
+            return -1;
           }
 
-          if (b.sheets[3] && b.sheets[3].gameVersion <= version.value) {
-            bDiff = b.sheets[3].difficulty;
-          }
+          const aDiff = a.sheets[3].difficulty;
+          const bDiff = b.sheets[3].difficulty;
 
           if (sortOrder.value == "asc") {
             return aDiff - bDiff;
           } else {
             return bDiff - aDiff;
           }
-        },
-      },
-    ],
+        }
+      }
+    ]
   },
   {
     text: "Score",
@@ -536,7 +589,7 @@ const sortOptions = [
               (profile.value.songs[a.id]?.scores[0]?.score ?? 0)
             );
           }
-        },
+        }
       },
       {
         text: "Hard Score",
@@ -553,7 +606,7 @@ const sortOptions = [
               (profile.value.songs[a.id]?.scores[1]?.score ?? 0)
             );
           }
-        },
+        }
       },
       {
         text: "Expert Score",
@@ -570,7 +623,7 @@ const sortOptions = [
               (profile.value.songs[a.id]?.scores[2]?.score ?? 0)
             );
           }
-        },
+        }
       },
       {
         text: "Inferno Score",
@@ -587,16 +640,20 @@ const sortOptions = [
               (profile.value.songs[a.id]?.scores[3]?.score ?? 0)
             );
           }
-        },
-      },
-    ],
-  },
+        }
+      }
+    ]
+  }
 ];
 
 const filters = ref([
+    {
+    type: "heading",
+    text: "Options"
+  },
   {
     type: "help",
-    help: ["All", "No", "Yes"],
+    help: ["All", "No", "Yes"]
   },
   {
     type: "buttons",
@@ -609,7 +666,7 @@ const filters = ref([
         filterFunction() {
           return true;
         },
-        active: true,
+        active: true
       },
       {
         text: "Not Played",
@@ -617,7 +674,7 @@ const filters = ref([
         iconActive: "mdi-close-circle",
         filterFunction(song) {
           return profile.value.songs[song.id]?.playCount == 0;
-        },
+        }
       },
       {
         text: "Played",
@@ -625,9 +682,9 @@ const filters = ref([
         iconActive: "mdi-check-circle",
         filterFunction(song) {
           return profile.value.songs[song.id]?.playCount > 0;
-        },
-      },
-    ],
+        }
+      }
+    ]
   },
   {
     type: "buttons",
@@ -640,7 +697,7 @@ const filters = ref([
         filterFunction() {
           return true;
         },
-        active: true,
+        active: true
       },
       {
         text: "Not a favorite",
@@ -648,7 +705,7 @@ const filters = ref([
         iconActive: "mdi-close-circle",
         filterFunction(song) {
           return !profile.value.songs[song.id]?.favorite;
-        },
+        }
       },
       {
         text: "Is a favorite",
@@ -656,9 +713,9 @@ const filters = ref([
         iconActive: "mdi-check-circle",
         filterFunction(song) {
           return profile.value.songs[song.id]?.favorite;
-        },
-      },
-    ],
+        }
+      }
+    ]
   },
   {
     type: "buttons",
@@ -671,7 +728,7 @@ const filters = ref([
         filterFunction() {
           return true;
         },
-        active: true,
+        active: true
       },
       {
         text: "No",
@@ -682,7 +739,7 @@ const filters = ref([
             song.sheets.filter((sheet) => sheet.gameVersion <= version.value)
               .length <= 3
           );
-        },
+        }
       },
       {
         text: "Yes",
@@ -693,9 +750,9 @@ const filters = ref([
             song.sheets.filter((sheet) => sheet.gameVersion <= version.value)
               .length > 3
           );
-        },
-      },
-    ],
+        }
+      }
+    ]
   },
   // {
   //   type: "buttons",
@@ -730,7 +787,7 @@ const filters = ref([
   // },
   {
     type: "heading",
-    text: "Clear Status",
+    text: "Clear Status"
   },
   {
     type: "help",
@@ -740,9 +797,9 @@ const filters = ref([
       "Clear",
       "Missless",
       "Full Combo",
-      "All Marvelous",
-    ],
-  },
+      "All Marvelous"
+    ]
+  }
 ]);
 
 for (let i = 0; i < waccaDifficulties.length; i++) {
@@ -757,7 +814,7 @@ for (let i = 0; i < waccaDifficulties.length; i++) {
         filterFunction() {
           return true;
         },
-        active: true,
+        active: true
       },
       {
         text: "Uncleared",
@@ -768,7 +825,7 @@ for (let i = 0; i < waccaDifficulties.length; i++) {
             !profile.value.songs[song.id].scores[i] ||
             profile.value.songs[song.id].scores[i].clear_count == 0
           );
-        },
+        }
       },
       {
         text: "Clear",
@@ -776,7 +833,7 @@ for (let i = 0; i < waccaDifficulties.length; i++) {
         iconActive: "mdi-alpha-c-circle",
         filterFunction(song) {
           return profile.value.songs[song.id]?.scores[i]?.clear_count > 0;
-        },
+        }
       },
       {
         text: "Missless",
@@ -784,7 +841,7 @@ for (let i = 0; i < waccaDifficulties.length; i++) {
         iconActive: "mdi-alpha-m-circle",
         filterFunction(song) {
           return profile.value.songs[song.id]?.scores[i]?.missless_count > 0;
-        },
+        }
       },
       {
         text: "Full Combo",
@@ -792,7 +849,7 @@ for (let i = 0; i < waccaDifficulties.length; i++) {
         iconActive: "mdi-alpha-f-circle",
         filterFunction(song) {
           return profile.value.songs[song.id]?.scores[i]?.full_combo_count > 0;
-        },
+        }
       },
       {
         text: "All Marvelous",
@@ -802,9 +859,9 @@ for (let i = 0; i < waccaDifficulties.length; i++) {
           return (
             profile.value.songs[song.id]?.scores[i]?.all_marvelous_count > 0
           );
-        },
-      },
-    ],
+        }
+      }
+    ]
   });
 }
 
@@ -815,12 +872,12 @@ let levelModel = ref([0, 15.1]); // Do not make things harder than Mobius
 
 filters.value.push({
   type: "heading",
-  text: "Level",
+  text: "Level"
 });
 
 filters.value.push({
   type: "help",
-  help: ["All", "Normal", "Hard", "Expert", "Inferno"],
+  help: ["All", "Normal", "Hard", "Expert", "Inferno"]
 });
 
 filters.value.push({
@@ -834,7 +891,7 @@ filters.value.push({
       filterFunction() {
         return true;
       },
-      active: true,
+      active: true
     },
     {
       text: "Normal",
@@ -844,7 +901,7 @@ filters.value.push({
         levelName = "Normal";
         return true;
       },
-      active: true,
+      active: true
     },
     {
       text: "Hard",
@@ -854,7 +911,7 @@ filters.value.push({
         levelName = "Hard";
         return true;
       },
-      active: true,
+      active: true
     },
     {
       text: "Expert",
@@ -864,7 +921,7 @@ filters.value.push({
         levelName = "Expert";
         return true;
       },
-      active: true,
+      active: true
     },
     {
       text: "Inferno",
@@ -874,9 +931,9 @@ filters.value.push({
         levelName = "Inferno";
         return true;
       },
-      active: true,
-    },
-  ],
+      active: true
+    }
+  ]
 });
 
 filters.value.push({
@@ -893,7 +950,7 @@ filters.value.push({
         song.sheets.filter(
           (sheet) =>
             sheet.difficulty >= levelModel.value[0] &&
-            sheet.difficulty <= levelModel.value[1],
+            sheet.difficulty <= levelModel.value[1]
         ).length > 0
       );
     } else {
@@ -936,7 +993,7 @@ filters.value.push({
         );
       }
     }
-  },
+  }
 });
 
 // Condense score filter to one range bar
@@ -947,12 +1004,12 @@ let scoreModel = ref([0, 1000000]);
 
 filters.value.push({
   type: "heading",
-  text: "Score",
+  text: "Score"
 });
 
 filters.value.push({
   type: "help",
-  help: ["All", "Normal", "Hard", "Expert", "Inferno"],
+  help: ["All", "Normal", "Hard", "Expert", "Inferno"]
 });
 
 filters.value.push({
@@ -966,7 +1023,7 @@ filters.value.push({
       filterFunction() {
         return true;
       },
-      active: true,
+      active: true
     },
     {
       text: "Normal",
@@ -976,7 +1033,7 @@ filters.value.push({
         scoreName = "Normal";
         return true;
       },
-      active: true,
+      active: true
     },
     {
       text: "Hard",
@@ -986,7 +1043,7 @@ filters.value.push({
         scoreName = "Hard";
         return true;
       },
-      active: true,
+      active: true
     },
     {
       text: "Expert",
@@ -996,7 +1053,7 @@ filters.value.push({
         scoreName = "Expert";
         return true;
       },
-      active: true,
+      active: true
     },
     {
       text: "Inferno",
@@ -1006,9 +1063,9 @@ filters.value.push({
         scoreName = "Inferno";
         return true;
       },
-      active: true,
-    },
-  ],
+      active: true
+    }
+  ]
 });
 
 filters.value.push({
@@ -1065,7 +1122,7 @@ filters.value.push({
         return score >= scoreModel.value[0] && score <= scoreModel.value[1];
       }
     }
-  },
+  }
 });
 
 // leaving this here in case it turns out I need to debounce it
@@ -1171,11 +1228,12 @@ const search = ref(null);
 const activeSort = ref(sortOptions[0]);
 const sortOrder = ref("asc");
 const activeCategories = ref([]);
+const filtersOpen = ref(false);
 
 function toggleCategory(category) {
   if (activeCategories.value.includes(category.ja)) {
     activeCategories.value = activeCategories.value.filter(
-      (c) => c != category.ja,
+      (c) => c != category.ja
     );
   } else {
     activeCategories.value.push(category.ja);
@@ -1216,7 +1274,7 @@ const songsFiltered = computed(() => {
     "2.5次元",
     "バラエティ",
     "オリジナル",
-    "TANO*C",
+    "TANO*C"
   ];
 
   // If not on WACCA Plus, deselect the plus category if it was selected before hiding the button
@@ -1270,7 +1328,7 @@ const songsFiltered = computed(() => {
         compareCategories.length == 1 ||
         (compareCategories.length > 1 &&
           !compareCategories.some((i) =>
-            ["WACCA", "WACCA Lily", "WACCA Reverse"].includes(i),
+            ["WACCA", "WACCA Lily", "WACCA Reverse"].includes(i)
           ))
       ) {
         // Get plus songs with infs
@@ -1292,7 +1350,7 @@ const songsFiltered = computed(() => {
     baseResults,
     lilyResults,
     reverseResults,
-    plusResults,
+    plusResults
   );
 
   // check if we have a version type selected
@@ -1306,7 +1364,7 @@ const songsFiltered = computed(() => {
       results = allResults.filter((song) => {
         return compareCategories.includes(song.category);
       });
-    }  
+    }
   }
   // Default check categories for set of all songs
   else {
@@ -1333,7 +1391,7 @@ const songsFiltered = computed(() => {
     // perform search
     results = fuzzysort
       .go(search.value, results, {
-        keys: ["title", "artist", "titleEnglish"],
+        keys: ["title", "artist", "titleEnglish"]
       })
       .map((result) => result.obj);
   }
@@ -1372,7 +1430,7 @@ function toggleSortDirection() {
 function clickFilter(coFilter, coFilterSub) {
   let filter = filters.value.find((filter) => filter.text == coFilter.text);
   let filterSub = filter.subItems.find(
-    (filterSub) => filterSub.text == coFilterSub.text,
+    (filterSub) => filterSub.text == coFilterSub.text
   );
 
   // Multi select support for level and score
@@ -1411,7 +1469,7 @@ function clickFilter(coFilter, coFilterSub) {
   if (
     filter.subItems.every(
       (value) =>
-        value.active == true || !value.text == "All" || value.text == "All",
+        value.active == true || !value.text == "All" || value.text == "All"
     )
   ) {
     if (filter.text == "Difficulty ") {
@@ -1431,7 +1489,7 @@ function clickFilter(coFilter, coFilterSub) {
 const songsPaginated = computed(() => {
   return songsFiltered.value.slice(
     (page.value - 1) * perPage,
-    page.value * perPage,
+    page.value * perPage
   );
 });
 
